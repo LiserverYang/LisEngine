@@ -1,0 +1,4 @@
+Build/Intermediate/**
+Build/Binaries/**
+.VSCodeCounter
+.vscode

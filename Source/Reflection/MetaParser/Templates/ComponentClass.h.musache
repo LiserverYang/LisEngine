@@ -1,0 +1,31 @@
+/*
+ * Copyright 2025, LiserverYang, All rights reserved.
+ *
+ * Genericed by reflection system in LisEngine.
+ */
+
+class ReflectionSystem::__{{ClassName}}Helper
+{
+public:
+    const std::vector<std::string> &GetFields();
+    const std::vector<std::string> &GetFunctions();
+
+    template<class T>
+    T &GetFieldValue(std::string FieldName);
+
+    template<class T>
+    void SetFieldValue(std::string FieldName, T Value);
+ 
+    template<class T>
+    T Invoke(std::string FunctionName, ...);
+
+    {{#FieldList}}
+
+    {{FieldType}} &Get{{FieldName}}();
+    void Set{{FieldName}}({{FieldType}} Value);
+    bool {{FieldName}}IsVector();
+    
+    {{/FieldList}}
+
+    void Regist{{ClassName}}();
+};
