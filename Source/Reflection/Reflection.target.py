@@ -2,6 +2,8 @@
 
 from Build import BuildSystem
 
+import shutil
+
 class ReflectionTarget(BuildSystem.TargetBase):
     """
     The target of reflection system.
@@ -15,3 +17,9 @@ class ReflectionTarget(BuildSystem.TargetBase):
         self.TargetType = BuildSystem.TargetTypeEnum.Program
         self.bBuildAllmodules = True
         self.ModulesSubFolder = ["MetaParser"]
+    
+        # Copy Templates to bin folder
+        try:
+            shutil.rmtree("./Build/Binaries/Templates")
+        finally:
+            shutil.copytree("./Source/Reflection/MetaParser/Templates/", "./Build/Binaries/Templates")

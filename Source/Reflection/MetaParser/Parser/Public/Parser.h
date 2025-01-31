@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <string>
+#include "Arguments.h"
 
 namespace ReflectionSystem
 {
-    class Parser
+    class MetaParser
     {
     public:
-        void Parse(std::string FilePath, std::string GenericPath);
+        int Parse(Arguments arguments);
     };
 }

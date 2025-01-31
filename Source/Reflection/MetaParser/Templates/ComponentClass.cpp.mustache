@@ -1,10 +1,14 @@
-/*
+/**
  * Copyright 2025, LiserverYang, All rights reserved.
  *
  * Genericed by reflection system in LisEngine.
  */
 
-const std::vector<std::string> &ReflectionSystem::{{ClassName}}Helper::GetFields()
+#include "{{ClassName}}.gen.h"
+
+ReflectionSystem::__{{ClassName}}Helper::__{{ClassName}}Helper()
 {
-    return { {{FieldsInitList}} };
+    ReflectionSystem::AddClass<{{ClassName}}>("{{ClassName}}")
+    {{#Fields}}.AddMemberVariable("{{FieldName}}", &{{ClassName}}::{{FieldName}}){{/Fields}}
+    {{#Functions}}.AddMemberFunction("{{FunctionName}}", &{{ClassName}}::{{FunctionName}}){{/Functions}};
 }

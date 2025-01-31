@@ -15,4 +15,4 @@ class MainModule(BuildSystem.ModuleBase):
 
         self.BinaryType = BuildSystem.BinaryTypeEnum.EntryPoint
         self.ArgumentsAdded = ["./Source/Reflection/MetaParser/Main/Resource/ICON.o"]
-        self.ModulesDependOn = ["libclang"]
+        self.ModulesDependOn = ["libclang", "Parser"]

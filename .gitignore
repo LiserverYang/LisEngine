@@ -1,4 +1,10 @@
-Build/Intermediate/**
-Build/Binaries/**
 .VSCodeCounter
 .vscode
+
+*.o
+*.exe
+*.dll
+
+Build/BuildSystem/__pycache__/**
+
+Test/**
