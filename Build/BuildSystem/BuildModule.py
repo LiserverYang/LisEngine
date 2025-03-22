@@ -8,6 +8,7 @@ from .TargetTypeEnum import TargetTypeEnum
 from .BinaryTypeEnum import BinaryTypeEnum
 from .Functions import GetCurrentSystem
 from .SystemEnum import SystemEnum
+from .GenericReflectionFiles import GenericReflectionFiles
 import os
 
 def BuildModule(ModuleName: str):
@@ -26,7 +27,7 @@ def BuildModule(ModuleName: str):
         if not BuildContext.BuildedModule[BuildContext.BuildOrder.index(Depend)]:
             Logger.Log(LogLevelEnum.Error, "Module '" + ModuleName + "' depend on module '" + Depend + "', but it didn't build.", True, -1)
 
-    Logger.Log(LogLevelEnum.Info, f"[{BuildContext.BuildOrder.index(ModuleName) + 1}/{len(BuildContext.BuildOrder)}] Building module '{ModuleName}'")
+    Logger.Log(LogLevelEnum.Info, f"[{ModuleID + 1}/{len(BuildContext.BuildOrder)}] Building module '{ModuleName}'")
 
     # Make file dir
 
@@ -41,6 +42,8 @@ def BuildModule(ModuleName: str):
 
     WaitCompileCFilesList: list[str] = []
     WaitCompileCppFilesList: list[str] = []
+
+    ReflectionHppFileList: list[str] = []
 
     COFilesList: list[str] = []
     CxxOFilesList: list[str] = []
@@ -60,8 +63,30 @@ def BuildModule(ModuleName: str):
                 elif SubFileFileIO.EndSwitch() == ".c":
                     WaitCompileCFilesList.append(SubFileFileIO.FilePathStr)
 
+    def SearchReflection(Folder: FileIO):
+        """
+        Help to search files
+        """
+
+        for SubFileStr in Folder.GetSubFiles():
+            SubFileFileIO: FileIO = FileIO(SubFileStr)
+            if SubFileFileIO.IsFolder():
+                SearchReflection(SubFileFileIO)
+            else:
+                if SubFileFileIO.EndSwitch() == ".hpp":
+                    ReflectionHppFileList.append(SubFileFileIO.FilePathStr)
+
     # Search all files
     Search(FileIO(os.path.dirname(BuildContext.ModulePath[ModuleID]) + "/Private/"))
+
+    # Reflection
+    if BuildContext.TargetName != "Reflection" and BuildContext.ModuleConfiguration[ModuleID].EnableReflectionGeneric:
+        SearchReflection(FileIO(os.path.dirname(BuildContext.ModulePath[ModuleID]) + "/Public/"))
+        for File in ReflectionHppFileList:
+            GenericReflectionFiles(FileIO(File), FileIO("./Build/Binaries/Reflection"))
+            GenericFilePath: str = os.path.dirname(File) + f"/{os.path.splitext(File)[0].split('/')[-1]}.gen.cpp"
+            if FileIO(GenericFilePath).Exits():
+                WaitCompileCppFilesList.append(GenericFilePath)
 
     # Check if it has been compiled
     for File in WaitCompileCFilesList + WaitCompileCppFilesList:
@@ -90,9 +115,9 @@ def BuildModule(ModuleName: str):
     if BuildContext.ModuleConfiguration[ModuleID].BinaryType == BinaryTypeEnum.EntryPoint:
         TargetExits = FileIO(f"./Build/Binaries/{ModuleName}{PlatFormEndSwitchExe}").Exits()
     elif BuildContext.ModuleConfiguration[ModuleID].BinaryType == BinaryTypeEnum.DynamicLib:
-        TargetExits = FileIO(f"./Build/Binaries/lib{ModuleName}{PlatFormEndSwitchDy}").Exits()
+        TargetExits = FileIO(f"./Build/Binaries/{BuildContext.TargetName}-{ModuleName}{PlatFormEndSwitchDy}").Exits()
     else:
-        TargetExits = FileIO(f"./Build/Binaries/lib{ModuleName}.a").Exits()
+        TargetExits = FileIO(f"./Build/Binaries/{BuildContext.TargetName}-{ModuleName}.a").Exits()
 
     if BuildContext.ModuleConfiguration[ModuleID].AutoSkiped or (len(WaitCompileCFilesList) == len(WaitCompileCppFilesList) == 0 and AllDependsSkiped and TargetExits):
         BuildContext.BuildedModule[ModuleID] = True
@@ -108,9 +133,13 @@ def BuildModule(ModuleName: str):
 
     for name in BuildContext.ModuleConfiguration[ModuleID].ModulesDependOn:
         if BuildContext.ModuleConfiguration[BuildContext.BuildOrder.index(name)].LinkThisModule:
-            DependsModules.append(name)
+            if BuildContext.ModuleConfiguration[BuildContext.BuildOrder.index(name)].EnableBinaryLibPrefix:
+                DependsModules.append(BuildContext.TargetName + "-" + name)
+            else:
+                DependsModules.append(name)
 
     LinkDependsStr: str = ("-l" if len(DependsModules) > 0 else "") + " -l".join(DependsModules)
+    LibPrefix: str = f"{BuildContext.TargetName}-" if BuildContext.ModuleConfiguration[ModuleID].EnableBinaryLibPrefix else ""
 
     BuildResult: int = 0
 
@@ -131,11 +160,11 @@ def BuildModule(ModuleName: str):
         BuildResult = os.system(link_command)
     elif BuildContext.ModuleConfiguration[ModuleID].BinaryType == BinaryTypeEnum.DynamicLib:
         # Build dynamic lib
-        link_command = f"g++ {' '.join(COFilesList)} {' '.join(CxxOFilesList)} -o {BinaryFilesDir}/lib{ModuleName}.dll -L./Build/Binaries/ {LinkDependsStr} -fPIC -shared {ModuleAddedArguments} {TargetAddedArguments}"
+        link_command = f"g++ {' '.join(COFilesList)} {' '.join(CxxOFilesList)} -o {BinaryFilesDir}/{LibPrefix}{ModuleName}.dll -L./Build/Binaries/ {LinkDependsStr} -fPIC -shared {ModuleAddedArguments} {TargetAddedArguments}"
         BuildResult = os.system(link_command)
     elif BuildContext.ModuleConfiguration[ModuleID].BinaryType == BinaryTypeEnum.StaticLib:
         # Build static lib
-        link_command = f"ar rcs {BinaryFilesDir}/lib{ModuleName}.a {' '.join(COFilesList)} {' '.join(CxxOFilesList)} {ModuleAddedArguments} {TargetAddedArguments}"
+        link_command = f"ar rcs {BinaryFilesDir}/{LibPrefix}{ModuleName}.a {' '.join(COFilesList)} {' '.join(CxxOFilesList)} {ModuleAddedArguments} {TargetAddedArguments}"
         for depend in DependsModules:
             if BuildContext.ModuleConfiguration[BuildContext.BuildOrder.index(depend)].BinaryType == BinaryTypeEnum.StaticLib:
                 link_command += f" {depend}"
@@ -144,4 +173,4 @@ def BuildModule(ModuleName: str):
     if BuildResult == 0:
         BuildContext.BuildedModule[ModuleID] = True
     else:
-        Logger.Log(LogLevelEnum.Error, f"There's something error when build module '{ModuleName}' in target '{BuildContext.TargetName}', and the compiler return value '{BuildResult}' not 0.") 
+        Logger.Log(LogLevelEnum.Error, f"There's something error when build module '{ModuleName}' in target '{BuildContext.TargetName}', and the compiler return value '{BuildResult}' not 0.", True, -1)

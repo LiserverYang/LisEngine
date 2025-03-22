@@ -29,6 +29,6 @@ def BuildEngine(SourceFolder: FileIO) -> None:
 
     Logger.Log(LogLevelEnum.Info, "Found target: " + ", ".join(TargetList))
 
-    # Build targets
-    for TargetPathStr in TargetList:
-        BuildTarget(FileIO(TargetPathStr))
+    # Build targets, Reflection first
+    BuildTarget(FileIO(TargetList[1]))
+    BuildTarget(FileIO(TargetList[0]))

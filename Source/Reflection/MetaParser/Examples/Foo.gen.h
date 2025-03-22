@@ -5,6 +5,7 @@
  */
 
 #include "ReflectionFull.h"
+
 #include "Foo.hpp"
 
 namespace ReflectionSystem

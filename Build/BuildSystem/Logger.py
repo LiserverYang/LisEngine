@@ -3,6 +3,8 @@
 import time
 from . import LogLevelEnum
 
+import colorama
+
 class TLogger:
     """
     The logger, includes function log.
@@ -20,16 +22,19 @@ class TLogger:
 
         match LogLevel:
             case LogLevelEnum.Info:
-                OutputStr = OutputStr.replace(LevelMarco, "Info")
+                OutputStr = OutputStr.replace(LevelMarco, colorama.Fore.BLUE + "Info" + colorama.Fore.RESET)
             case LogLevelEnum.Warning:
-                OutputStr = OutputStr.replace(LevelMarco, "Warning")
+                OutputStr = OutputStr.replace(LevelMarco, colorama.Fore.YELLOW + "Warning" + colorama.Fore.RESET)
             case LogLevelEnum.Error:
                 OutputStr = OutputStr.replace(LevelMarco, "Error")
 
         OutputStr = OutputStr.replace(TimeMarco, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
         OutputStr = OutputStr.replace(MsgMarco, Msg)
 
-        print(OutputStr)
+        if LogLevel == LogLevelEnum.Error:
+            print(colorama.Fore.LIGHTRED_EX)
+
+        print(OutputStr + colorama.Fore.RESET)
 
         if bExit:
             exit(ExitCode)

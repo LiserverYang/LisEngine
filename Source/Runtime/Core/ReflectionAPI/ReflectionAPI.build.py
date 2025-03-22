@@ -2,18 +2,15 @@
 
 from Build import BuildSystem
 
-class libclangModule(BuildSystem.ModuleBase):
+class ReflectionAPIModule(BuildSystem.ModuleBase):
     """
-    Build engine class.
+    Pydoc
     """
 
     def Configuration(self) -> None:
         """
-        Config all settings.
-        Called after the function __init__.
+        Pydoc
         """
-
         self.BinaryType = BuildSystem.BinaryTypeEnum.DynamicLib
         self.AutoSkiped = True
-        self.LinkThisModule = True
-        self.EnableBinaryLibPrefix = False
+        self.LinkThisModule = False

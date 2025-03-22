@@ -11,7 +11,7 @@ We used the UE-like build system but python. To build our engine, you can do fol
 3) Run command `python build.py`.
 4) The binary file is in `./Build/Binaries/`.
 
-And if there's something wrong when building, please check all 3rdpartys if it's exits.
+And if there's something wrong when building, please check all 3rdpartys if it's exsits.
 For exmaple, you should copy `libclang.dll` `glfw3.dll` `SDL3.dll` to folder `Build/Binaries`.
 See the 3rdpartys list and check the binary files you need.
 

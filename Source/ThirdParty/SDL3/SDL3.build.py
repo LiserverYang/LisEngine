@@ -15,3 +15,5 @@ class SDL3Module(BuildSystem.ModuleBase):
         self.bBuildThisModule = True
         self.BinaryType = BuildSystem.BinaryTypeEnum.DynamicLib
         self.AutoSkiped = True
+        self.LinkThisModule = True
+        self.EnableBinaryLibPrefix = False

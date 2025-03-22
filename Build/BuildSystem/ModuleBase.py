@@ -24,6 +24,9 @@ class ModuleBase:
     AutoSkiped = False
     LinkThisModule = True
 
+    EnableReflectionGeneric = False
+    EnableBinaryLibPrefix = True
+
     def Configuration(self) -> None:
         """
         Config all settings.
