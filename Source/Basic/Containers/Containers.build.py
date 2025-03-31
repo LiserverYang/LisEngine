@@ -13,5 +13,6 @@ class ContainersModule(BuildSystem.ModuleBase):
         Called after the function __init__.
         """
 
-        self.BinaryType = BuildSystem.BinaryTypeEnum.DynamicLib
         self.ModulesDependOn = ["TypeDefnitions"]
+        self.LinkThisModule = False
+        self.AutoSkiped = True

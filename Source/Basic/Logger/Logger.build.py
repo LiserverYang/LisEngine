@@ -14,4 +14,5 @@ class LoggerModule(BuildSystem.ModuleBase):
 
         self.bBuildThisModule = True
         self.BinaryType = BuildSystem.BinaryTypeEnum.DynamicLib
-        
+        self.LinkThisModule = False
+        self.AutoSkiped = True

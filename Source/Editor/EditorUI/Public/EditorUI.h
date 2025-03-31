@@ -16,10 +16,6 @@
 #include <string>
 #include <vector>
 
-#ifdef __EMSCRIPTEN__
-#include "../libs/emscripten/emscripten_mainloop_stub.h"
-#endif
-
 #include "Window.h"
 
 class EditorUI

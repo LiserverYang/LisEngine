@@ -1,5 +1,7 @@
 # LisEngine
 
+[简体中文](./README-ZH.md)
+
 A simple, easy-to-learn, and open-source game engine.
 
 ## How to build
@@ -14,6 +16,8 @@ We used the UE-like build system but python. To build our engine, you can do fol
 And if there's something wrong when building, please check all 3rdpartys if it's exsits.
 For exmaple, you should copy `libclang.dll` `glfw3.dll` `SDL3.dll` to folder `Build/Binaries`.
 See the 3rdpartys list and check the binary files you need.
+
+(Although theoretically this project supports Unix systems, in reality we have not adapted it yet)
 
 ## Thanks
 

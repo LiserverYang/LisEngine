@@ -16,4 +16,7 @@ class TBuildContext:
     TargetConfiguration: TargetBase = TargetBase()
     TargetName: str = ""
 
+    # This is for clangd
+    CompileCommands = []
+
 BuildContext: TBuildContext = TBuildContext()

@@ -2,12 +2,12 @@
 
 from Build import BuildSystem
 
-class Target(BuildSystem.TargetBase):
+class ${TargetName}(BuildSystem.TargetBase):
     """
-    Pydoc
+    ${#Pydoc}
     """
 
     def Configuration(self) -> None:
         """
-        Pydoc
+        ${#Pydoc}
         """

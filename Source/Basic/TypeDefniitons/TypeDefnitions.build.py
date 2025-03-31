@@ -14,3 +14,5 @@ class TypeDefnitionsModule(BuildSystem.ModuleBase):
         """
 
         self.BinaryType = BuildSystem.BinaryTypeEnum.DynamicLib
+        self.LinkThisModule = False
+        self.AutoSkiped = True

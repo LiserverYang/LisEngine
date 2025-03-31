@@ -29,8 +29,6 @@ void Editor::Run()
 
         ImGui::ShowDemoWindow();
 
-        
-
         m_LisEngineEditorUI->FrameEnd();
     }
 }
