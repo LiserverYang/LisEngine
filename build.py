@@ -25,4 +25,4 @@ if not BuildSystem.FileIO("./Build/Binaries/Templates").Exists():
     BuildSystem.os.system("mkdir ./Build/Binaries/Templates")
 
 # Just build
-BuildSystem.BuildEngine(BuildSystem.FileIO("./Source"), ["./Source/Reflection/Reflection.target.py", "/Source/Editor.target.py"])
+BuildSystem.BuildEngine(BuildSystem.FileIO("./Source"), ["./Source/Reflection/Reflection.target.py", "./Source/Editor.target.py"])

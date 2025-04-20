@@ -17,7 +17,7 @@ class EditorTarget(BuildSystem.TargetBase):
         self.ModulesSubFolder = ["Runtime", "Editor", "Basic", "ThirdParty", "Runtime/Core", "Runtime/Function", "Runtime/Resource", "Runtime/Platform"]
 
         # Check vulkan sdk
-        if not BuildSystem.FileIO(BuildSystem.Config.VulkanConfig.VulkanSDKPosition).Exits:
+        if not BuildSystem.FileIO(BuildSystem.Config.VulkanConfig.VulkanSDKPosition).Exists:
             BuildSystem.Logger.Log(BuildSystem.LogLevelEnum.Error, "Could not find vulkan stk, please edit Build/BuildSystem/Config/VulkanConfig.py", True, -1)
 
         match BuildSystem.BuildContext.BuildType:
