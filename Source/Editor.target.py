@@ -12,7 +12,7 @@ class EditorTarget(BuildSystem.TargetBase):
         Config editor's config.
         """
 
-        self.TargetType = BuildSystem.TargetTypeEnum.Editor
+        self.TargetType = BuildSystem.TargetTypeEnum.Program
         self.bBuildAllmodules = True
         self.ModulesSubFolder = ["Runtime", "Editor", "Basic", "ThirdParty", "Runtime/Core", "Runtime/Function", "Runtime/Resource", "Runtime/Platform"]
 
@@ -20,4 +20,11 @@ class EditorTarget(BuildSystem.TargetBase):
         if not BuildSystem.FileIO(BuildSystem.Config.VulkanConfig.VulkanSDKPosition).Exits:
             BuildSystem.Logger.Log(BuildSystem.LogLevelEnum.Error, "Could not find vulkan stk, please edit Build/BuildSystem/Config/VulkanConfig.py", True, -1)
 
-        self.ArgumentsAdded = [f"-L{BuildSystem.Config.VulkanConfig.VulkanSDKPosition}/Bin -L{BuildSystem.Config.VulkanConfig.VulkanSDKPosition}/Lib", "-g"]
+        match BuildSystem.BuildContext.BuildType:
+            case BuildSystem.BuildTypeEnum.Release:
+                self.ArgumentsAdded = ["-O3", "-D__RELEASE__"]
+            case BuildSystem.BuildTypeEnum.Debug:
+                self.ArgumentsAdded = ["-O0", "-g", "-D__DEBUG__"]
+            case BuildSystem.BuildTypeEnum.Development:
+                # Developemt is also a kind of debug
+                self.ArgumentsAdded = ["-O1", "-g", "-D__DEBUG__"]

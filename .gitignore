@@ -12,6 +12,7 @@
 *.dll
 
 __pycache__
+*.pyc
 
 Test/**
 

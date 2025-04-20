@@ -15,5 +15,14 @@ if BuildSystem.GetCurrentSystem() == BuildSystem.SystemEnum.Other:
 # Don't write __pycatch__
 BuildSystem.sys.dont_write_bytecode = True
 
+# Copy files to folder
+BuildSystem.os.system("cp ./Bin/libclang.dll ./Build/Binaries/libclang.dll")
+BuildSystem.os.system("cp ./Bin/SDL3.dll ./Build/Binaries/SDL3.dll")
+BuildSystem.os.system("cp ./Bin/SourceCodePro-Regular.ttf ./Build/Binaries/SourceCodePro-Regular.ttf")
+
+# Generic folder
+if not BuildSystem.FileIO("./Build/Binaries/Templates").Exists():
+    BuildSystem.os.system("mkdir ./Build/Binaries/Templates")
+
 # Just build
-BuildSystem.BuildEngine(BuildSystem.FileIO("./Source"))
+BuildSystem.BuildEngine(BuildSystem.FileIO("./Source"), ["./Source/Reflection/Reflection.target.py", "/Source/Editor.target.py"])

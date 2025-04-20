@@ -15,4 +15,4 @@ class EditorModule(BuildSystem.ModuleBase):
 
         self.BinaryType = BuildSystem.BinaryTypeEnum.DynamicLib
         self.ModulesDependOn = ["Containers", "ImGUI", "SDL3", "VulkanSDK", "Engine", "EditorUI"]
-        self.ArgumentsAdded = ["-lvulkan-1"]
+        self.ArgumentsAdded = [f"-L{BuildSystem.Config.VulkanConfig.VulkanSDKPosition}/Bin -L{BuildSystem.Config.VulkanConfig.VulkanSDKPosition}/Lib", "-lvulkan-1"]

@@ -15,4 +15,4 @@ class MainModule(BuildSystem.ModuleBase):
 
         self.BinaryType = BuildSystem.BinaryTypeEnum.EntryPoint
         self.ModulesDependOn = ["Containers", "ImGUI", "SDL3", "VulkanSDK", "Editor", "Engine", "EditorUI"]
-        self.ArgumentsAdded = ["-lvulkan-1", "./Source/Editor/Main/Resource/ICON.o"]
+        self.ArgumentsAdded = ["-lvulkan-1", "./Source/Editor/Main/Resource/ICON.o", f"-L{BuildSystem.Config.VulkanConfig.VulkanSDKPosition}/Bin -L{BuildSystem.Config.VulkanConfig.VulkanSDKPosition}/Lib"]
